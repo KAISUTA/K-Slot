@@ -36,18 +36,9 @@ const Reel = forwardRef(
     const reel = useRef<THREE.Group>(null);
 
     // Color maps
-    const colorMap0 = useLoader(
-      THREE.TextureLoader,
-      'images/reel_0.png',
-    );
-    const colorMap1 = useLoader(
-      THREE.TextureLoader,
-      'images/reel_1.png',
-    );
-    const colorMap2 = useLoader(
-      THREE.TextureLoader,
-      'images/reel_2.png',
-    );
+    const colorMap0 = useLoader(THREE.TextureLoader, 'images/reel_0.png');
+    const colorMap1 = useLoader(THREE.TextureLoader, 'images/reel_1.png');
+    const colorMap2 = useLoader(THREE.TextureLoader, 'images/reel_2.png');
     let activeColorMap;
     switch (props.map) {
       case 0:

@@ -36,7 +36,10 @@ const HelpModal = () => {
           <div className="modal-text">Click and drag to rotate the 3D view</div>
           <div id="paytable">
             {PAYTABLE_ROWS.map((row) => (
-              <div className="modal-text" key={`${row.symbols.join('-')}-${row.pay}`}>
+              <div
+                className="modal-text"
+                key={`${row.symbols.join('-')}-${row.pay}`}
+              >
                 {row.symbols.map((symbol, index) => (
                   <img
                     className="modal-image"
@@ -46,11 +49,7 @@ const HelpModal = () => {
                   />
                 ))}
                 <span> Pay {row.pay} </span>
-                <img
-                  className="modal-image"
-                  src="images/coin.png"
-                  alt=""
-                />
+                <img className="modal-image" src="images/coin.png" alt="" />
               </div>
             ))}
           </div>

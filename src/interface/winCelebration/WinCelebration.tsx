@@ -41,16 +41,18 @@ const getParticleCounts = (
   coinCount: Math.round(
     clamp(
       category.minCoinCount + Math.sqrt(win) * 1.8 + Math.log10(win + 1) * 7,
-      isMobile ? Math.max(10, Math.floor(category.minCoinCount * 0.55)) : category.minCoinCount,
+      isMobile
+        ? Math.max(10, Math.floor(category.minCoinCount * 0.55))
+        : category.minCoinCount,
       isMobile ? 54 : 160,
     ),
   ),
   sparkleCount: Math.round(
     clamp(
-      category.minSparkleCount +
-        Math.sqrt(win) * 0.9 +
-        Math.log10(win + 1) * 6,
-      isMobile ? Math.max(8, Math.floor(category.minSparkleCount * 0.45)) : category.minSparkleCount,
+      category.minSparkleCount + Math.sqrt(win) * 0.9 + Math.log10(win + 1) * 6,
+      isMobile
+        ? Math.max(8, Math.floor(category.minSparkleCount * 0.45))
+        : category.minSparkleCount,
       isMobile ? 28 : 96,
     ),
   ),
@@ -98,7 +100,8 @@ const WinCelebration = ({ win }: WinCelebrationProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fountainRef = useRef<CoinFountain | null>(null);
   const category = getWinCategory(win);
-  const isMobile = window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches;
+  const isMobile =
+    window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches;
 
   useEffect(() => {
     if (win > 0) {
@@ -147,24 +150,30 @@ const WinCelebration = ({ win }: WinCelebrationProps) => {
         <div className="win-celebration-amount">{win}</div>
       </div>
 
-      <canvas ref={canvasRef} className="coin-fountain-canvas" aria-hidden="true" />
+      <canvas
+        ref={canvasRef}
+        className="coin-fountain-canvas"
+        aria-hidden="true"
+      />
 
       <div className="sparkle-field" aria-hidden="true">
         {sparkles.map((sparkle) => (
           <span
             key={sparkle.id}
             className={`sparkle-particle sparkle-${sparkle.kind}`}
-            style={{
-              width: sparkle.width,
-              height: sparkle.height,
-              animationDelay: sparkle.delay,
-              animationDuration: sparkle.duration,
-              '--spark-x-mid': sparkle.xMid,
-              '--spark-y-mid': sparkle.yMid,
-              '--spark-x-end': sparkle.xEnd,
-              '--spark-y-end': sparkle.yEnd,
-              '--spark-rotate': sparkle.rotate,
-            } as SparkParticleStyle}
+            style={
+              {
+                width: sparkle.width,
+                height: sparkle.height,
+                animationDelay: sparkle.delay,
+                animationDuration: sparkle.duration,
+                '--spark-x-mid': sparkle.xMid,
+                '--spark-y-mid': sparkle.yMid,
+                '--spark-x-end': sparkle.xEnd,
+                '--spark-y-end': sparkle.yEnd,
+                '--spark-rotate': sparkle.rotate,
+              } as SparkParticleStyle
+            }
           />
         ))}
       </div>

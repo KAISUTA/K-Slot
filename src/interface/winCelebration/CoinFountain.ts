@@ -7,13 +7,7 @@ const PALETTE = [
   '#e6a400',
   '#d99000',
 ];
-const MEGA_PALETTE = [
-  ...PALETTE,
-  '#fff6c9',
-  '#ffdf6e',
-  '#f5c542',
-  '#c98300',
-];
+const MEGA_PALETTE = [...PALETTE, '#fff6c9', '#ffdf6e', '#f5c542', '#c98300'];
 
 type CoinParticle = {
   x: number;
@@ -45,7 +39,8 @@ class CoinFountain {
     this.cvs = canvas;
     this.ctx = context;
     this.lowPower =
-      window.innerWidth <= 768 || window.matchMedia('(pointer: coarse)').matches;
+      window.innerWidth <= 768 ||
+      window.matchMedia('(pointer: coarse)').matches;
     this.resize();
     window.addEventListener('resize', this.resizeHandler);
     this.loop();
@@ -78,7 +73,8 @@ class CoinFountain {
         y: cy,
         vx: Math.cos(angle) * spd,
         vy: Math.sin(angle) * spd - (mega ? 3 : 1.5),
-        r: (mega ? 9 + Math.random() * 6 : 6 + Math.random() * 5) *
+        r:
+          (mega ? 9 + Math.random() * 6 : 6 + Math.random() * 5) *
           (this.lowPower ? 0.88 : 1),
         rot: Math.random() * Math.PI * 2,
         rotV: (Math.random() - 0.5) * 0.28,
@@ -104,7 +100,9 @@ class CoinFountain {
     const height = window.innerHeight;
     ctx.clearRect(0, 0, width, height);
 
-    this.coins = this.coins.filter((coin) => coin.life > 0 && coin.y < height + 80);
+    this.coins = this.coins.filter(
+      (coin) => coin.life > 0 && coin.y < height + 80,
+    );
     this.coins.forEach((coin) => {
       coin.vy += 0.52;
       coin.x += coin.vx;
