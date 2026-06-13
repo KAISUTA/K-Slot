@@ -1,0 +1,264 @@
+.win-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  animation-name: win-overlay-fade;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.win-celebration-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  text-align: center;
+  text-shadow:
+    -2px -2px 0 #ffd400,
+    2px -2px 0 #ffd400,
+    -2px 2px 0 #ffd400,
+    2px 2px 0 #ffd400,
+    0 3px 0 rgba(114, 54, 0, 0.38),
+    0 0 12px rgba(255, 238, 82, 0.96),
+    0 0 28px rgba(255, 211, 0, 0.82);
+  filter: drop-shadow(0 0 10px rgba(255, 218, 31, 0.44));
+  animation: win-text-pop 900ms ease-out both;
+}
+
+.win-celebration-label {
+  font-size: clamp(52px, 10vw, 126px);
+  line-height: 0.95;
+}
+
+.win-celebration-amount {
+  margin-top: 0.05em;
+  font-size: clamp(52px, 10vw, 126px);
+}
+
+.win-tier-big .win-celebration-label {
+  font-size: clamp(64px, 12vw, 154px);
+}
+
+.win-tier-big .win-celebration-amount {
+  font-size: clamp(64px, 12vw, 154px);
+}
+
+.win-tier-huge .win-celebration-label {
+  font-size: clamp(72px, 14vw, 178px);
+}
+
+.win-tier-huge .win-celebration-amount {
+  font-size: clamp(72px, 14vw, 178px);
+}
+
+.sparkle-field {
+  position: absolute;
+  inset: 0;
+}
+
+.coin-fountain-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sparkle-particle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  transform-origin: center;
+  filter:
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 14px rgba(255, 216, 74, 0.95))
+    drop-shadow(0 0 18px rgba(109, 43, 216, 0.78));
+  animation-name: sparkle-orbit-burst;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.sparkle-star {
+  background: radial-gradient(circle, #ffffff 0 12%, #fff7a8 13% 34%, #ffd84a 35% 62%, transparent 63%);
+  clip-path: polygon(50% 0, 58% 33%, 88% 12%, 67% 42%, 100% 50%, 67% 58%, 88% 88%, 58% 67%, 50% 100%, 42% 67%, 12% 88%, 33% 58%, 0 50%, 33% 42%, 12% 12%, 42% 33%);
+}
+
+.sparkle-streak {
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #ffffff 20%, #ffd84a 52%, #a36cff 76%, transparent);
+}
+
+.sparkle-ring {
+  border: 2px solid rgba(255, 216, 74, 0.95);
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 45%, rgba(255, 255, 255, 0.9) 48%, transparent 55%);
+}
+
+.gold-glow-soft {
+  background: radial-gradient(circle, rgba(255, 216, 74, 0.18), rgba(109, 43, 216, 0.08) 34%, transparent 60%);
+}
+
+.gold-glow-medium {
+  background: radial-gradient(circle, rgba(255, 216, 74, 0.26), rgba(109, 43, 216, 0.12) 38%, transparent 64%);
+}
+
+.gold-glow-strong {
+  background: radial-gradient(circle, rgba(255, 216, 74, 0.36), rgba(255, 140, 0, 0.14) 34%, rgba(109, 43, 216, 0.18) 52%, transparent 72%);
+}
+
+.win-shake-soft {
+  animation-name: win-overlay-fade, win-shake-soft;
+}
+
+.win-shake-medium {
+  animation-name: win-overlay-fade, win-shake-medium;
+}
+
+.win-shake-strong {
+  animation-name: win-overlay-fade, win-shake-strong;
+}
+
+@keyframes win-text-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.55);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.18);
+  }
+  34% {
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes sparkle-orbit-burst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1) rotate(var(--spark-rotate));
+  }
+  22% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15) rotate(calc(var(--spark-rotate) + 40deg));
+  }
+  58% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--spark-x-mid)), calc(-50% + var(--spark-y-mid)))
+      scale(1) rotate(calc(var(--spark-rotate) + 120deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--spark-x-end)), calc(-50% + var(--spark-y-end)))
+      scale(0.22) rotate(calc(var(--spark-rotate) + 240deg));
+  }
+}
+
+@keyframes win-overlay-fade {
+  0%,
+  84% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes win-shake-soft {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-2px);
+  }
+  60% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes win-shake-medium {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes win-shake-strong {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  15% {
+    transform: translate(-8px, 3px);
+  }
+  30% {
+    transform: translate(8px, -3px);
+  }
+  45% {
+    transform: translate(-6px, -2px);
+  }
+  60% {
+    transform: translate(6px, 2px);
+  }
+  75% {
+    transform: translate(-3px, 1px);
+  }
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .win-celebration-label {
+    font-size: clamp(44px, 14vw, 72px);
+  }
+
+  .win-celebration-amount {
+    font-size: clamp(44px, 14vw, 72px);
+  }
+
+  .win-tier-big .win-celebration-label,
+  .win-tier-huge .win-celebration-label {
+    font-size: clamp(50px, 16vw, 88px);
+  }
+
+  .win-tier-big .win-celebration-amount,
+  .win-tier-huge .win-celebration-amount {
+    font-size: clamp(50px, 16vw, 88px);
+  }
+
+  .win-celebration-text {
+    text-shadow:
+      -1px -1px 0 #ffd400,
+      1px -1px 0 #ffd400,
+      -1px 1px 0 #ffd400,
+      1px 1px 0 #ffd400,
+      0 2px 0 rgba(114, 54, 0, 0.34),
+      0 0 7px rgba(255, 238, 82, 0.82),
+      0 0 16px rgba(255, 211, 0, 0.66);
+    filter: drop-shadow(0 0 7px rgba(255, 218, 31, 0.42));
+  }
+
+  .sparkle-particle {
+    filter:
+      drop-shadow(0 0 5px rgba(255, 255, 255, 0.82))
+      drop-shadow(0 0 8px rgba(255, 216, 74, 0.72));
+  }
+}

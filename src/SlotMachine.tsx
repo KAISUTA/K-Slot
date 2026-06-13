@@ -21,8 +21,10 @@ import {
   useImperativeHandle,
   useState,
   useCallback,
+  useMemo,
 } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import useGame from './stores/store';
 import segmentToFruit from './utils/functions/segmentToFruit';
@@ -51,6 +53,7 @@ const SlotMachine = forwardRef(({ value }: SlotMachineProps, ref) => {
     setFruit0,
     setFruit1,
     setFruit2,
+    setReelSuspense,
     setWin,
     phase,
     start,
@@ -61,11 +64,10 @@ const SlotMachine = forwardRef(({ value }: SlotMachineProps, ref) => {
     validateBet,
   } = useGame((state) => state);
 
-  const reelRefs = [
-    useRef<ReelGroup>(null),
-    useRef<ReelGroup>(null),
-    useRef<ReelGroup>(null),
-  ];
+  const reel0Ref = useRef<ReelGroup>(null);
+  const reel1Ref = useRef<ReelGroup>(null);
+  const reel2Ref = useRef<ReelGroup>(null);
+  const reelRefs = useMemo(() => [reel0Ref, reel1Ref, reel2Ref], []);
 
   const [, setStoppedReels] = useState(0);
 
@@ -112,24 +114,45 @@ const SlotMachine = forwardRef(({ value }: SlotMachineProps, ref) => {
     setFruit0('');
     setFruit1('');
     setFruit2('');
+    setReelSuspense(false);
 
-    const min = 10;
-    const max = 35;
-    const getRandomStopSegment = () =>
-      Math.floor(Math.random() * (max - min + 1)) + min;
+    const stopSegments = [0, 1, 2].map((index) => {
+      const baseSegment = 12 + Math.floor(Math.random() * 6);
+      return baseSegment + index * (9 + Math.floor(Math.random() * 4));
+    });
+    const projectedFruits = stopSegments.map((stopSegment, index) =>
+      segmentToFruit(index, stopSegment),
+    );
+
+    if (
+      projectedFruits[0] !== undefined &&
+      projectedFruits[0] === projectedFruits[1]
+    ) {
+      stopSegments[2] += 8;
+    }
 
     for (let i = 0; i < 3; i++) {
       const reel = reelRefs[i].current;
       if (reel) {
         reel.rotation.x = 0;
         reel.reelSegment = 0;
-        const stopSegment = getRandomStopSegment();
+        const stopSegment = stopSegments[i];
         reel.reelSpinUntil = stopSegment;
         reel.targetRotationX = stopSegment * WHEEL_SEGMENT;
         reel.isSnapping = false;
       }
     }
-  }, [updateCoins, addSpin, setWin, start, setFruit0, setFruit1, setFruit2]);
+  }, [
+    updateCoins,
+    addSpin,
+    setWin,
+    start,
+    setFruit0,
+    setFruit1,
+    setFruit2,
+    setReelSuspense,
+    reelRefs,
+  ]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -174,8 +197,15 @@ const SlotMachine = forwardRef(({ value }: SlotMachineProps, ref) => {
           const fruit = segmentToFruit(i, reel.reelSpinUntil);
           if (fruit) {
             if (i === 0) setFruit0(fruit);
-            if (i === 1) setFruit1(fruit);
-            if (i === 2) setFruit2(fruit);
+            if (i === 1) {
+              setFruit1(fruit);
+              const currentFruit0 = useGame.getState().fruit0;
+              setReelSuspense(currentFruit0 !== '' && currentFruit0 === fruit);
+            }
+            if (i === 2) {
+              setFruit2(fruit);
+              setReelSuspense(false);
+            }
           }
           reel.reelSpinUntil = undefined;
           reel.isSnapping = false;
@@ -195,6 +225,7 @@ const SlotMachine = forwardRef(({ value }: SlotMachineProps, ref) => {
 
   const [buttonZ, setButtonZ] = useState(0);
   const [buttonY, setButtonY] = useState(-13);
+  const reelSuspense = useGame((state) => state.reelSuspense);
 
   return (
     <>
@@ -225,6 +256,16 @@ const SlotMachine = forwardRef(({ value }: SlotMachineProps, ref) => {
         scale={[10, 10, 10]}
         reelSegment={0}
       />
+      {reelSuspense && (
+        <Sparkles
+          position={[7, 0, 6.2]}
+          count={70}
+          scale={[4.4, 4.4, 1.4]}
+          size={5.2}
+          speed={1.5}
+          color="#ffffff"
+        />
+      )}
       <Button
         scale={[0.055, 0.045, 0.045]}
         position={[0, buttonY, buttonZ]}

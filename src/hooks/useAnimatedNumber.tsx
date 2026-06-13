@@ -5,13 +5,19 @@ export default function useAnimatedNumber(
   duration: number = 1000,
 ) {
   const [animatedValue, setAnimatedValue] = useState(target);
+  const animatedValueRef = useRef<number>(target);
   const animationFrameId = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
   const startValueRef = useRef<number>(target);
 
   useEffect(() => {
     startTimeRef.current = performance.now();
-    startValueRef.current = animatedValue;
+    startValueRef.current = animatedValueRef.current;
+
+    const setNextAnimatedValue = (value: number) => {
+      animatedValueRef.current = value;
+      setAnimatedValue(value);
+    };
 
     const step = (currentTime: number) => {
       const elapsed = currentTime - startTimeRef.current;
@@ -24,10 +30,10 @@ export default function useAnimatedNumber(
       const nextValue = startValueRef.current + change * easedProgress;
 
       if (progress < 1) {
-        setAnimatedValue(Math.round(nextValue));
+        setNextAnimatedValue(Math.round(nextValue));
         animationFrameId.current = requestAnimationFrame(step);
       } else {
-        setAnimatedValue(target);
+        setNextAnimatedValue(target);
       }
     };
 

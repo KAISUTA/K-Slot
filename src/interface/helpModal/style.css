@@ -4,32 +4,68 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(31, 31, 31, 0.6);
+  z-index: 3;
+  pointer-events: none;
 }
 
 .modal-box {
+  position: fixed;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
-  width: min(80vw, 450px);
+  width: min(38vw, 390px);
   height: fit-content;
-  padding: 2vh min(8vw, 30px);
-  border-radius: 40px;
-  z-index: 3;
+  max-height: min(88vh, 720px);
+  padding: 42px min(4vw, 26px) 20px;
+  border-radius: 24px;
+  pointer-events: auto;
   text-align: center;
   box-shadow: 0 0 20px #ffffff;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  color: #ffffff;
+  background: #3b0873;
+  border: 2px solid #3b0873;
+  border-radius: 50%;
+  font-size: 0;
+  line-height: 0;
+  transform-origin: 50% 50%;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.modal-close::before {
+  content: '\00d7';
+  display: block;
+  font-size: 24px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.modal-close:hover {
+  transform: rotate(135deg) scale(1.08);
+  box-shadow: 0 0 12px rgba(59, 8, 115, 0.55);
 }
 
 .modal-text {
   font-weight: 500;
   margin: 1vh 0;
   text-align: left;
-  font-size: min(3.5vw, 15px);
+  font-size: min(2.3vw, 15px);
   text-align: center;
   max-width: 30ch;
   display: flex;
@@ -55,7 +91,7 @@ span {
   margin: 1em 0;
 }
 
-button {
+.modal-bars-button {
   color: #ffffff;
   background-color: #3b0873;
   border: none;
@@ -95,4 +131,27 @@ a:hover {
 
 #source > * {
   margin: 0 0.2em;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .modal-box {
+    left: 10px;
+    width: min(72vw, 330px);
+    padding: 38px 16px 16px;
+    border-radius: 20px;
+  }
+
+  .modal-text {
+    font-size: min(3.1vw, 13px);
+  }
+
+  .modal-image {
+    width: min(6vw, 24px);
+  }
+
+  .modal-bars-button {
+    width: 120px;
+    height: 40px;
+    font-size: 1em;
+  }
 }

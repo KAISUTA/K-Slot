@@ -1,10 +1,18 @@
 import { Canvas } from '@react-three/fiber';
+import { useEffect } from 'react';
 import Interface from './interface/Interface';
 import Game from './Game';
 import useGame from './stores/store';
 
 const App = () => {
   const { isMobile } = useGame((state) => state);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--app-background-image',
+      "url('images/background.png')",
+    );
+  }, []);
 
   return (
     <>

@@ -19,12 +19,21 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import { Fruit } from '../utils/enums';
 
 const BET_TIERS = [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500];
+const SOUND_STORAGE_KEY = 'cherryCharmSoundOn';
+
+const readStoredSoundPreference = () => {
+  const storedValue = window.localStorage.getItem(SOUND_STORAGE_KEY);
+  return storedValue === null ? true : storedValue === 'true';
+};
 
 type State = {
   isMobile: boolean;
   setIsMobile: (value: boolean) => void;
   modal: boolean;
   setModal: (isOpen: boolean) => void;
+  soundOn: boolean;
+  setSoundOn: (isSoundOn: boolean) => void;
+  toggleSound: () => void;
   coins: number;
   updateCoins: (amount: number) => void;
   fruit0: Fruit | '';
@@ -48,6 +57,8 @@ type State = {
   phase: 'idle' | 'spinning';
   start: (betAtLaunch: number) => void;
   end: () => void;
+  reelSuspense: boolean;
+  setReelSuspense: (isSuspenseActive: boolean) => void;
   firstTime: boolean;
   setFirstTime: (isFirstTime: boolean) => void;
 };
@@ -58,6 +69,18 @@ const useGame = create<State>()(
     setIsMobile: (value: boolean) => set(() => ({ isMobile: value })),
     modal: false,
     setModal: (isOpen: boolean) => set({ modal: isOpen }),
+    soundOn: readStoredSoundPreference(),
+    setSoundOn: (isSoundOn: boolean) => {
+      window.localStorage.setItem(SOUND_STORAGE_KEY, String(isSoundOn));
+      set({ soundOn: isSoundOn });
+    },
+    toggleSound: () => {
+      set((state) => {
+        const nextSoundOn = !state.soundOn;
+        window.localStorage.setItem(SOUND_STORAGE_KEY, String(nextSoundOn));
+        return { soundOn: nextSoundOn };
+      });
+    },
 
     /**
      * Coins: Just updates the value.
@@ -123,6 +146,7 @@ const useGame = create<State>()(
         if (state.phase === 'idle') {
           return {
             phase: 'spinning',
+            reelSuspense: false,
             startTime: Date.now(),
             appliedBet: betAtLaunch,
           };
@@ -133,11 +157,18 @@ const useGame = create<State>()(
     end: () => {
       set((state) => {
         if (state.phase === 'spinning') {
-          return { phase: 'idle', endTime: Date.now() };
+          return {
+            phase: 'idle',
+            reelSuspense: false,
+            endTime: Date.now(),
+          };
         }
         return {};
       });
     },
+    reelSuspense: false,
+    setReelSuspense: (isSuspenseActive: boolean) =>
+      set({ reelSuspense: isSuspenseActive }),
     firstTime: true,
     setFirstTime: (isFirstTime: boolean) => set({ firstTime: isFirstTime }),
   })),

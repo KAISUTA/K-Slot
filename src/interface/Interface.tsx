@@ -1,6 +1,9 @@
 import useGame from '../stores/store';
 import HelpModal from './helpModal/HelpModal';
 import HelpButton from './helpButton/HelpButton';
+import SoundToggle from './soundToggle/SoundToggle';
+import AntiGamblingNotice from './antiGamblingNotice/AntiGamblingNotice';
+import WinCelebration from './winCelebration/WinCelebration';
 import useAnimatedNumber from '../hooks/useAnimatedNumber';
 import './style.css';
 
@@ -11,8 +14,14 @@ const Interface = () => {
   const animatedCoins = useAnimatedNumber(coins);
   return (
     <>
-      {/* Help Button */}
-      <HelpButton />
+      {/* Utility Buttons */}
+      <div className="utility-buttons">
+        <SoundToggle />
+        <HelpButton />
+      </div>
+
+      <AntiGamblingNotice />
+      <WinCelebration win={win} />
 
       {/* Modal */}
       {modal && <HelpModal />}
@@ -22,7 +31,7 @@ const Interface = () => {
         <img
           id="desktop-logo"
           className="site-logo-img"
-          src="thumbfeed-logo-inline.svg"
+          src="thumbfeed-logo-inline-white.svg"
           alt="Thumbfeed logo"
         />
         <img
@@ -35,7 +44,7 @@ const Interface = () => {
 
       {/* Logo */}
       <div id="logo-section">
-        <img className="logo" src="./images/logo.png" alt="" />
+        <img className="logo" src="images/logo.png" alt="" />
         {/* <div id="version">{__APP_VERSION__}</div> */}
       </div>
 
@@ -43,7 +52,7 @@ const Interface = () => {
         {/* Coins */}
         <div className="coins-section">
           <div className="coins-number">{animatedCoins}</div>
-          <img className="coins-image" src="./images/coin.png" />
+          <img className="coins-image" src="images/coin.png" />
         </div>
 
         {/* Bet */}

@@ -1,0 +1,84 @@
+.anti-gambling-notice {
+  position: fixed;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: min(88vw, 360px);
+  padding: 28px 30px;
+  color: #000000;
+  background: #ffffff;
+  border-radius: 40px;
+  border: none;
+  box-shadow:
+    0 0 20px #ffffff,
+    0 0 22px rgba(59, 8, 115, 0.32);
+  text-align: center;
+}
+
+.anti-gambling-text {
+  font-size: 15px;
+  line-height: 1.38;
+}
+
+.anti-gambling-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+  font-size: 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.anti-gambling-checkbox input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  accent-color: #3b0873;
+  cursor: pointer;
+}
+
+.anti-gambling-close {
+  color: #ffffff;
+  background-color: #3b0873;
+  border: none;
+  width: 150px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: transform 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.anti-gambling-close:active {
+  transform: scale(0.9);
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .anti-gambling-notice {
+    top: 50%;
+    right: auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(92vw, 330px);
+    padding: 22px 20px;
+    border-radius: 28px;
+  }
+
+  .anti-gambling-text {
+    font-size: 13px;
+  }
+
+  .anti-gambling-checkbox {
+    font-size: 12px;
+  }
+
+  .anti-gambling-close {
+    width: 120px;
+    height: 42px;
+    font-size: 1em;
+  }
+}

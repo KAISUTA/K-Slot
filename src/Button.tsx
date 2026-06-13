@@ -50,7 +50,7 @@ const Button = (props: React.JSX.IntrinsicElements['group']) => {
         position={[0, -33, 22]}
         fontSize={55}
         scale={[0.8, 1, 1]}
-        font="./fonts/Nunito-Black.ttf"
+        font="fonts/Nunito-Black.ttf"
       >
         {phase === 'idle' ? 'SPIN' : 'SPINNING'}
       </Text>
