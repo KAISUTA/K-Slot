@@ -1,3 +1,17 @@
+# K-Slot
+
+K-Craft向けにMinecraft風のオリジナル・ボクセル素材とUIを組み込んだ、3Dスロットゲームです。
+抽選・残高処理はK-Shop側のサーバーAPIへ接続する前提です。
+
+Forked from [Cherry Charm](https://github.com/michaelkolesidis/cherry-charm) by Michael Kolesidis.
+Original project and this derivative are licensed under GNU AGPL-3.0-or-later.
+
+## Generated assets
+
+`public/images/kcraft-symbols-source.png`、各リール画像、背景画像はK-Slot用に新規生成したオリジナル素材です。Minecraft公式テクスチャの複製ではありません。
+
+---
+
 ![Cherry Charm Logo](./public/images/logo.png)
 
 **An online 3D slot machine game.**

@@ -2,13 +2,10 @@ import useGame from '../../stores/store';
 import './style.css';
 
 const PAYTABLE_ROWS = [
-  { symbols: ['cherry', 'cherry', 'cherry'], pay: 50 },
-  { symbols: ['apple', 'apple', 'apple'], pay: 20 },
-  { symbols: ['banana', 'banana', 'banana'], pay: 15 },
-  { symbols: ['lemon', 'lemon', 'lemon'], pay: 5 },
-  { symbols: ['cherry', 'cherry'], pay: 40 },
-  { symbols: ['apple', 'apple'], pay: 10 },
-  { symbols: ['banana', 'banana'], pay: 5 },
+  { symbols: ['diamond', 'diamond', 'diamond'], pay: 50 },
+  { symbols: ['emerald', 'emerald', 'emerald'], pay: 20 },
+  { symbols: ['gold', 'gold', 'gold'], pay: 15 },
+  { symbols: ['redstone', 'redstone', 'redstone'], pay: 5 },
 ];
 
 const HelpModal = () => {
@@ -27,13 +24,12 @@ const HelpModal = () => {
         </button>
         <div className="modal-main">
           <div className="modal-text">
-            Click on the SPIN button or press SPACE to spin.
+            SPINボタンまたはスペースキーで回します。
           </div>
           <div className="modal-text">
-            Cherry Charm only considers it a match if the fruits appear
-            consecutively from left to right
+            同じ絵柄が左から連続すると当選です。
           </div>
-          <div className="modal-text">Click and drag to rotate the 3D view</div>
+          <div className="modal-text">ドラッグすると筐体の角度を変えられます。</div>
           <div id="paytable">
             {PAYTABLE_ROWS.map((row) => (
               <div
@@ -48,14 +44,14 @@ const HelpModal = () => {
                     key={`${symbol}-${index}`}
                   />
                 ))}
-                <span> Pay {row.pay} </span>
-                <img className="modal-image" src="images/coin.png" alt="" />
+                <span> × {row.pay} </span>
+                <img className="modal-image" src="images/emerald.png" alt="" />
               </div>
             ))}
           </div>
 
           <button className="modal-bars-button" onClick={toggleBars}>
-            {showBars ? 'Hide' : 'Show'} Bars
+            当選ラインを{showBars ? '隠す' : '表示'}
           </button>
 
           <div>
@@ -84,11 +80,11 @@ const HelpModal = () => {
               <div>
                 <a
                   className="modal-source modal-link"
-                  href="https://github.com/michaelkolesidis/cherry-charm"
+                  href="https://github.com/KAISUTA/K-Slot"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Source
+                  K-Slot Source
                 </a>
               </div>
             </div>

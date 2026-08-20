@@ -17,7 +17,11 @@ const Button = (props: React.JSX.IntrinsicElements['group']) => {
   const gltf = useGLTF('models/button.glb') as unknown as GLTFResult;
   const { nodes } = gltf;
 
-  const material = new THREE.MeshStandardMaterial({ color: '#3b0873' });
+  const material = new THREE.MeshStandardMaterial({
+    color: phase === 'idle' ? '#167a49' : '#445049',
+    metalness: 0.18,
+    roughness: 0.48,
+  });
 
   return (
     <group

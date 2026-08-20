@@ -19,9 +19,15 @@
 }
 
 .logo {
-  width: 300px;
-  transform: rotate(-3deg);
-  filter: drop-shadow(0 0 5px rgb(255, 255, 255));
+  color: #f5f7f8;
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  letter-spacing: -0.08em;
+  line-height: 1;
+  text-shadow: 0 4px 0 #101417, 0 0 28px rgba(255,255,255,.18);
+}
+
+.logo span {
+  color: #62df8d;
 }
 
 #version {
@@ -128,8 +134,7 @@
 
 @media (max-width: 768px), (pointer: coarse) {
   .logo {
-    width: 175px;
-    transform: rotate(-3deg);
+    font-size: 2.1rem;
   }
 
   .win-label,

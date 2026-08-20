@@ -1,0 +1,50 @@
+import path from 'node:path';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const sharp = require('C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');
+
+const [, , source, outputDir] = process.argv;
+if (!source || !outputDir) {
+  throw new Error('usage: node build-kcraft-reels.mjs <sprite-sheet> <output-dir>');
+}
+
+const metadata = await sharp(source).metadata();
+const cellWidth = Math.floor(metadata.width / 2);
+const cellHeight = Math.floor(metadata.height / 4);
+const orders = [
+  [0, 2, 4, 6, 1, 3, 5, 7],
+  [1, 3, 5, 7, 0, 2, 4, 6],
+  [4, 0, 6, 2, 5, 1, 7, 3],
+];
+
+const cells = await Promise.all(
+  Array.from({ length: 8 }, (_, index) => {
+    const left = (index % 2) * cellWidth;
+    const top = Math.floor(index / 2) * cellHeight;
+    return sharp(source)
+      .extract({ left, top, width: cellWidth, height: cellHeight })
+      .resize(500, 500, { fit: 'cover' })
+      .png()
+      .toBuffer();
+  }),
+);
+
+const names = ['diamond', 'emerald', 'gold', 'redstone', 'creeper', 'golden-apple', 'nether-star', 'tnt'];
+for (let index = 0; index < cells.length; index += 1) {
+  await sharp(cells[index]).png({ compressionLevel: 9 }).toFile(path.join(outputDir, `${names[index]}.png`));
+}
+
+for (let reel = 0; reel < orders.length; reel += 1) {
+  const composites = orders[reel].map((cell, row) => ({
+    input: cells[cell],
+    left: 0,
+    top: row * 500,
+  }));
+  await sharp({
+    create: { width: 500, height: 4000, channels: 3, background: '#111417' },
+  })
+    .composite(composites)
+    .png({ compressionLevel: 9 })
+    .toFile(path.join(outputDir, `reel_${reel}.png`));
+}

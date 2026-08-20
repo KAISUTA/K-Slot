@@ -2,14 +2,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/cherry-charm/',
+  base: '/static/k-slot/',
   plugins: [react()],
   server: {
     host: true,
     open: false,
   },
   build: {
-    outDir: './dist',
+    outDir: '../../app/static/k-slot',
     emptyOutDir: true,
     sourcemap: false,
   },

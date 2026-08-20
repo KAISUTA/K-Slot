@@ -10,7 +10,7 @@ const App = () => {
   useEffect(() => {
     document.documentElement.style.setProperty(
       '--app-background-image',
-      "url('images/background.png')",
+      "url('/static/k-slot/images/background.png')",
     );
   }, []);
 
