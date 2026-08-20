@@ -69,6 +69,8 @@
   gap: 8px;
 }
 
+.game-error { position:fixed;top:18px;left:50%;z-index:5;max-width:calc(100vw - 32px);padding:10px 14px;border:1px solid #fa9a9a;border-radius:10px;background:#591b1bdd;color:#fff;transform:translateX(-50%);font-size:14px; }
+
 .hidden {
   visibility: hidden;
   pointer-events: none;

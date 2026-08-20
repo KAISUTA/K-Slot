@@ -7,7 +7,7 @@ import useAnimatedNumber from '../hooks/useAnimatedNumber';
 import './style.css';
 
 const Interface = () => {
-  const { modal, coins, win, bet, betStep, phase, updateBet, setBetStep } = useGame(
+  const { modal, coins, win, error, bet, betStep, phase, updateBet, setBetStep } = useGame(
     (state) => state,
   );
   const animatedCoins = useAnimatedNumber(coins);
@@ -20,6 +20,7 @@ const Interface = () => {
       </div>
 
       <WinCelebration win={win} />
+      {error && <div className="game-error" role="alert">{error}</div>}
 
       {/* Modal */}
       {modal && <HelpModal />}

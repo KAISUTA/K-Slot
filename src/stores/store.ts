@@ -16,9 +16,7 @@
 
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { Fruit } from '../utils/enums';
-
-const MIN_BET = 10;
+const MIN_BET = 100;
 const MAX_BET = 10_000;
 const SOUND_STORAGE_KEY = 'cherryCharmSoundOn';
 
@@ -36,13 +34,8 @@ type State = {
   setSoundOn: (isSoundOn: boolean) => void;
   toggleSound: () => void;
   coins: number;
+  setCoins: (amount: number) => void;
   updateCoins: (amount: number) => void;
-  fruit0: Fruit | '';
-  setFruit0: (fr: Fruit | '') => void;
-  fruit1: Fruit | '';
-  setFruit1: (fr: Fruit | '') => void;
-  fruit2: Fruit | '';
-  setFruit2: (fr: Fruit | '') => void;
   showBars: boolean;
   toggleBars: () => void;
   bet: number;
@@ -53,6 +46,8 @@ type State = {
   validateBet: () => void;
   win: number;
   setWin: (amount: number) => void;
+  error: string;
+  setError: (message: string) => void;
   spins: number;
   addSpin: () => void;
   startTime: number;
@@ -90,16 +85,11 @@ const useGame = create<State>()(
      * Snap-down logic removed from here to prevent bet resetting mid-spin.
      */
     coins: 1000,
+    setCoins: (amount: number) => set({ coins: amount }),
     updateCoins: (amount: number) => {
       set((state) => ({ coins: state.coins + amount }));
     },
 
-    fruit0: '',
-    setFruit0: (fr: Fruit | '') => set({ fruit0: fr }),
-    fruit1: '',
-    setFruit1: (fr: Fruit | '') => set({ fruit1: fr }),
-    fruit2: '',
-    setFruit2: (fr: Fruit | '') => set({ fruit2: fr }),
     showBars: false,
     toggleBars: () => set((state) => ({ showBars: !state.showBars })),
 
@@ -136,6 +126,8 @@ const useGame = create<State>()(
 
     win: 0,
     setWin: (amount: number) => set({ win: amount }),
+    error: '',
+    setError: (message: string) => set({ error: message }),
     spins: 0,
     addSpin: () => set((state) => ({ spins: state.spins + 1 })),
     startTime: 0,

@@ -39,6 +39,8 @@ const Reel = forwardRef(
     const colorMap0 = useLoader(THREE.TextureLoader, 'images/reel_0.png');
     const colorMap1 = useLoader(THREE.TextureLoader, 'images/reel_1.png');
     const colorMap2 = useLoader(THREE.TextureLoader, 'images/reel_2.png');
+    const colorMap3 = useLoader(THREE.TextureLoader, 'images/reel_3.png');
+    const colorMap4 = useLoader(THREE.TextureLoader, 'images/reel_4.png');
     let activeColorMap;
     switch (props.map) {
       case 0:
@@ -49,6 +51,12 @@ const Reel = forwardRef(
         break;
       case 2:
         activeColorMap = colorMap2;
+        break;
+      case 3:
+        activeColorMap = colorMap3;
+        break;
+      case 4:
+        activeColorMap = colorMap4;
         break;
     }
 

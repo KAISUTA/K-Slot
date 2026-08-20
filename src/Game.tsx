@@ -19,7 +19,7 @@ const Game = () => {
       <OrbitControls />
       <Lights />
       {showBars && <Bars />}
-      <SlotMachine ref={slotMachineRef} value={[1, 2, 3]} />
+      <SlotMachine ref={slotMachineRef} />
     </>
   );
 };
