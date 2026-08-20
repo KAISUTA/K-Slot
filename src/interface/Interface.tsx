@@ -7,7 +7,7 @@ import useAnimatedNumber from '../hooks/useAnimatedNumber';
 import './style.css';
 
 const Interface = () => {
-  const { modal, coins, win, error, bet, betStep, phase, updateBet, setBetStep } = useGame(
+  const { modal, coins, win, error, bet, betStep, phase, updateBet, setBetStep, setBetMax } = useGame(
     (state) => state,
   );
   const animatedCoins = useAnimatedNumber(coins);
@@ -28,7 +28,7 @@ const Interface = () => {
       <div className="interface">
         {/* Coins */}
         <div className="coins-section">
-          <div className="coins-number">{animatedCoins}</div>
+          <div className="coins-number">¥{animatedCoins.toLocaleString('ja-JP')}</div>
           <img className="coins-image" src="images/emerald.png" alt="" />
         </div>
 
@@ -36,7 +36,7 @@ const Interface = () => {
         <div className="bet-section">
           <div id="bet-controls" className={phase === 'idle' ? '' : 'hidden'}>
             <button className="bet-control" onClick={() => updateBet(-1)} aria-label={`BETを${betStep}下げる`}>−</button>
-            <div className="bet-readout"><span>BET</span><strong>{bet.toLocaleString('ja-JP')}</strong></div>
+            <div className="bet-readout"><span>BET</span><strong>¥{bet.toLocaleString('ja-JP')}</strong></div>
             <button className="bet-control" onClick={() => updateBet(1)} aria-label={`BETを${betStep}上げる`}>＋</button>
             <div className="bet-steps" aria-label="BET変更幅">
               {[10, 100, 1000, 10000].map((step) => (
@@ -44,6 +44,7 @@ const Interface = () => {
                   {step.toLocaleString('ja-JP')}
                 </button>
               ))}
+              <button onClick={setBetMax}>MAX</button>
             </div>
           </div>
         </div>
@@ -51,7 +52,7 @@ const Interface = () => {
         {/* Spins */}
         <div className="win-section">
           <div className="win-label">WIN </div>
-          <div className="win-amount">{win}</div>
+          <div className="win-amount">¥{win.toLocaleString('ja-JP')}</div>
         </div>
       </div>
     </>

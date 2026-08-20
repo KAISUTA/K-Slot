@@ -147,7 +147,7 @@ const WinCelebration = ({ win }: WinCelebrationProps) => {
     >
       <div className="win-celebration-text">
         <div className="win-celebration-label">{category.label}</div>
-        <div className="win-celebration-amount">{win}</div>
+        <div className="win-celebration-amount">¥{win.toLocaleString('ja-JP')}</div>
       </div>
 
       <canvas

@@ -17,7 +17,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 const MIN_BET = 100;
-const MAX_BET = 10_000;
 const SOUND_STORAGE_KEY = 'cherryCharmSoundOn';
 
 const readStoredSoundPreference = () => {
@@ -41,6 +40,7 @@ type State = {
   bet: number;
   betStep: number;
   setBetStep: (step: number) => void;
+  setBetMax: () => void;
   appliedBet: number;
   updateBet: (direction: number) => void;
   validateBet: () => void;
@@ -99,10 +99,11 @@ const useGame = create<State>()(
     bet: 100,
     betStep: 100,
     setBetStep: (step: number) => set({ betStep: step }),
+    setBetMax: () => set((state) => ({ bet: Math.max(MIN_BET, Math.floor(state.coins / 10) * 10) })),
     appliedBet: 100,
     updateBet: (direction: number) => {
       set((state) => {
-        const affordableMax = Math.min(MAX_BET, Math.floor(state.coins));
+        const affordableMax = Math.floor(state.coins / 10) * 10;
         const nextBet = Math.max(
           MIN_BET,
           Math.min(affordableMax, state.bet + direction * state.betStep),
@@ -118,7 +119,7 @@ const useGame = create<State>()(
     validateBet: () => {
       set((state) => {
         if (state.bet > state.coins) {
-          return { bet: Math.max(MIN_BET, Math.min(MAX_BET, Math.floor(state.coins))) };
+          return { bet: Math.max(MIN_BET, Math.floor(state.coins / 10) * 10) };
         }
         return {};
       });
