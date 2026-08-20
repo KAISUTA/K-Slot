@@ -6,30 +6,6 @@
   color: #fff;
 }
 
-#logo-section {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  margin: 0.5em;
-  pointer-events: none;
-}
-
-.logo {
-  color: #f5f7f8;
-  font-size: clamp(2rem, 5vw, 4.2rem);
-  letter-spacing: -0.08em;
-  line-height: 1;
-  text-shadow: 0 4px 0 #101417, 0 0 28px rgba(255,255,255,.18);
-}
-
-.logo span {
-  color: #62df8d;
-}
-
 #version {
   color: #f7f7f7;
   font-family: monospace;
@@ -70,12 +46,8 @@
   text-align: center;
   margin: auto auto 0.2em auto;
   width: 100%;
-  font-size: 65px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.1em;
+  display: grid;
+  place-items: center;
 }
 
 .bet-label {
@@ -90,7 +62,11 @@
 }
 
 #bet-controls {
-  margin-left: 0.25em;
+  pointer-events: all;
+  display: grid;
+  grid-template-columns: 56px minmax(150px,auto) 56px;
+  align-items: center;
+  gap: 8px;
 }
 
 .hidden {
@@ -99,17 +75,26 @@
 }
 
 .bet-control {
-  margin: 0;
-  font-size: 70px;
-  line-height: 40px;
-  text-align: center;
+  width: 56px;
+  height: 56px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 10px;
+  background: rgba(8,16,13,.8);
+  color: #fff;
+  font-size: 32px;
   cursor: pointer;
-  pointer-events: all;
 }
 
 .bet-control:hover {
-  color: #ffc400;
+  border-color: #62df8d;
 }
+
+.bet-readout { display:flex;align-items:baseline;justify-content:center;gap:10px; }
+.bet-readout span { font-size:20px; }
+.bet-readout strong { min-width:100px;font-size:38px;font-variant-numeric:tabular-nums; }
+.bet-steps { grid-column:1/-1;display:flex;justify-content:center;gap:6px; }
+.bet-steps button { border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 12px;background:rgba(8,16,13,.76);color:#fff;font-size:13px;cursor:pointer; }
+.bet-steps button.active { border-color:#62df8d;background:#167a49; }
 
 .coins-section {
   position: fixed;
@@ -133,10 +118,6 @@
 }
 
 @media (max-width: 768px), (pointer: coarse) {
-  .logo {
-    font-size: 2.1rem;
-  }
-
   .win-label,
   .win-amount {
     font-size: 35px;
@@ -147,17 +128,13 @@
   }
 
   .bet-section {
-    font-size: 35px;
-    bottom: 60px;
-  }
-
-  .bet-amount {
-    width: 90px;
+    bottom: 48px;
   }
 
   .bet-control {
-    font-size: 50px;
-    line-height: 30px;
+    width:44px;
+    height:44px;
+    font-size:26px;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
@@ -165,8 +142,15 @@
   }
 
   #bet-controls {
-    margin-left: 0;
+    grid-template-columns:44px minmax(110px,auto) 44px;
+    gap:5px;
   }
+
+  .bet-readout { gap:6px; }
+  .bet-readout span { font-size:14px; }
+  .bet-readout strong { min-width:70px;font-size:26px; }
+  .bet-steps { gap:4px; }
+  .bet-steps button { padding:5px 9px;font-size:11px; }
 
   .coins-number {
     font-size: 35px;

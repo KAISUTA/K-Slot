@@ -18,7 +18,8 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { Fruit } from '../utils/enums';
 
-const BET_TIERS = [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 500];
+const MIN_BET = 10;
+const MAX_BET = 10_000;
 const SOUND_STORAGE_KEY = 'cherryCharmSoundOn';
 
 const readStoredSoundPreference = () => {
@@ -45,6 +46,8 @@ type State = {
   showBars: boolean;
   toggleBars: () => void;
   bet: number;
+  betStep: number;
+  setBetStep: (step: number) => void;
   appliedBet: number;
   updateBet: (direction: number) => void;
   validateBet: () => void;
@@ -103,16 +106,18 @@ const useGame = create<State>()(
     /**
      * Bet Logic
      */
-    bet: 1,
-    appliedBet: 1,
+    bet: 100,
+    betStep: 100,
+    setBetStep: (step: number) => set({ betStep: step }),
+    appliedBet: 100,
     updateBet: (direction: number) => {
       set((state) => {
-        const currentIndex = BET_TIERS.indexOf(state.bet);
-        const nextIndex = currentIndex + direction;
-        if (nextIndex < 0 || nextIndex >= BET_TIERS.length) return {};
-        const newBet = BET_TIERS[nextIndex];
-        if (newBet > state.coins && direction > 0) return {};
-        return { bet: newBet };
+        const affordableMax = Math.min(MAX_BET, Math.floor(state.coins));
+        const nextBet = Math.max(
+          MIN_BET,
+          Math.min(affordableMax, state.bet + direction * state.betStep),
+        );
+        return { bet: nextBet };
       });
     },
 
@@ -123,12 +128,7 @@ const useGame = create<State>()(
     validateBet: () => {
       set((state) => {
         if (state.bet > state.coins) {
-          const affordableTiers = BET_TIERS.filter((t) => t <= state.coins);
-          const currentBet =
-            affordableTiers.length > 0
-              ? affordableTiers[affordableTiers.length - 1]
-              : BET_TIERS[0];
-          return { bet: currentBet };
+          return { bet: Math.max(MIN_BET, Math.min(MAX_BET, Math.floor(state.coins))) };
         }
         return {};
       });

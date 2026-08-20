@@ -35,9 +35,15 @@ for (let index = 0; index < cells.length; index += 1) {
   await sharp(cells[index]).png({ compressionLevel: 9 }).toFile(path.join(outputDir, `${names[index]}.png`));
 }
 
+// The GLB reel UVs invert each tile vertically and horizontally on the cylinder.
+// Rotate only the reel copies so symbols render upright; standalone UI icons stay unchanged.
+const reelCells = await Promise.all(
+  cells.map((cell) => sharp(cell).rotate(180).png().toBuffer()),
+);
+
 for (let reel = 0; reel < orders.length; reel += 1) {
   const composites = orders[reel].map((cell, row) => ({
-    input: cells[cell],
+    input: reelCells[cell],
     left: 0,
     top: row * 500,
   }));
