@@ -20,11 +20,19 @@ const orders = [
 
 const cells = await Promise.all(
   Array.from({ length: 8 }, (_, index) => {
-    const left = (index % 2) * cellWidth;
+    const square = Math.min(cellWidth, cellHeight);
+    const left = (index % 2) * cellWidth + Math.floor((cellWidth - square) / 2);
     const top = Math.floor(index / 2) * cellHeight;
     return sharp(source)
-      .extract({ left, top, width: cellWidth, height: cellHeight })
-      .resize(500, 500, { fit: 'cover' })
+      .extract({ left, top, width: square, height: square })
+      .resize(400, 400, { fit: 'contain' })
+      .extend({
+        top: 50,
+        bottom: 50,
+        left: 50,
+        right: 50,
+        background: '#111417',
+      })
       .png()
       .toBuffer();
   }),
