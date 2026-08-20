@@ -13,7 +13,7 @@ const toNumber = (value: number | string) => Number(value);
 
 const SlotMachine = forwardRef((_, ref) => {
   const { phase, start, end, bet, setCoins, setWin, setError, addSpin, setReelSuspense, stopAutoSpins, consumeAutoSpin } = useGame((state) => state);
-  const refs = [useRef<ReelGroup>(null), useRef<ReelGroup>(null), useRef<ReelGroup>(null), useRef<ReelGroup>(null), useRef<ReelGroup>(null)];
+  const refs = [useRef<ReelGroup>(null), useRef<ReelGroup>(null), useRef<ReelGroup>(null)];
   const reelRefs = useMemo(() => refs, []);
   const resultRef = useRef<SpinResponse | null>(null);
   const [, setStopped] = useState(0);
@@ -44,7 +44,7 @@ const SlotMachine = forwardRef((_, ref) => {
     try {
       const response = await fetch('/api/slots/spin', {
         method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ request_key: crypto.randomUUID(), total_bet: bet, line_count: 20 }),
+        body: JSON.stringify({ request_key: crypto.randomUUID(), total_bet: bet, line_count: 5 }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail || '抽選に失敗しました。');
@@ -88,7 +88,7 @@ const SlotMachine = forwardRef((_, ref) => {
           reel.rotation.x = reel.targetRotationX; reel.targetRotationX = undefined; reel.isSnapping = false;
           setStopped((count) => {
             const next = count + 1;
-            if (next === 5 && resultRef.current) window.setTimeout(() => {
+            if (next === 3 && resultRef.current) window.setTimeout(() => {
               const result = resultRef.current!; const balance = toNumber(result.balance);
               setWin(toNumber(result.payout)); setCoins(balance);
               window.parent.postMessage({ type: 'k-slot-balance', balance }, location.origin); end();
@@ -106,8 +106,8 @@ const SlotMachine = forwardRef((_, ref) => {
 
   useImperativeHandle(ref, () => ({ reelRefs }));
   return <>
-    {[-10, -5, 0, 5, 10].map((x, index) => <Reel key={index} ref={reelRefs[index]} map={index} position={[x, 0, 0]} scale={[7.1, 7.1, 7.1]} reelSegment={0} />)}
-    {phase === 'spinning' && <Sparkles position={[0, 0, 6.2]} count={80} scale={[16, 4.4, 1.4]} size={4.5} speed={1.3} color="#62df8d" />}
+    {[-5, 0, 5].map((x, index) => <Reel key={index} ref={reelRefs[index]} map={index} position={[x, 0, 0]} scale={[7.1, 7.1, 7.1]} reelSegment={0} />)}
+    {phase === 'spinning' && <Sparkles position={[0, 0, 6.2]} count={60} scale={[11, 4.4, 1.4]} size={4.5} speed={1.3} color="#62df8d" />}
     <Button scale={[0.055, 0.045, 0.045]} position={[0, buttonY, buttonZ]} rotation={[-Math.PI / 8, 0, 0]}
       onClick={() => void handleSpinAction()} onPointerDown={() => { setButtonZ(-1); setButtonY(-13.5); }} onPointerUp={() => { setButtonZ(0); setButtonY(-13); }} />
   </>;
