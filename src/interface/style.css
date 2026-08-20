@@ -97,6 +97,12 @@
 .bet-steps { grid-column:1/-1;display:flex;justify-content:center;gap:6px; }
 .bet-steps button { border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 12px;background:rgba(8,16,13,.76);color:#fff;font-size:13px;cursor:pointer; }
 .bet-steps button.active { border-color:#62df8d;background:#167a49; }
+.auto-controls { grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2px; }
+.auto-controls span { margin-right:3px;color:#9deab5;font-size:12px;font-weight:700;letter-spacing:.12em; }
+.auto-controls button,.auto-stop { border:1px solid rgba(98,223,141,.42);border-radius:999px;padding:5px 11px;background:rgba(5,34,20,.9);color:#eafff0;font-size:12px;font-weight:700;cursor:pointer; }
+.auto-controls button:hover,.auto-stop:hover { background:#167a49;border-color:#9cf4bc; }
+.auto-controls .auto-infinite { min-width:32px;font-size:16px;line-height:1; }
+.auto-stop { pointer-events:all;position:fixed;top:18px;left:50%;z-index:6;transform:translateX(-50%);padding:9px 16px;background:#6d2828;border-color:#ffa1a1; }
 
 .coins-section {
   position: fixed;
@@ -153,6 +159,8 @@
   .bet-readout strong { min-width:70px;font-size:26px; }
   .bet-steps { gap:4px; }
   .bet-steps button { padding:5px 9px;font-size:11px; }
+  .auto-controls { gap:4px; }
+  .auto-controls button { padding:4px 9px;font-size:11px; }
 
   .coins-number {
     font-size: 35px;

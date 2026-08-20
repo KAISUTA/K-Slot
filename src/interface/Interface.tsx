@@ -7,10 +7,14 @@ import useAnimatedNumber from '../hooks/useAnimatedNumber';
 import './style.css';
 
 const Interface = () => {
-  const { modal, coins, win, error, bet, betStep, phase, updateBet, setBetStep, setBetMax } = useGame(
+  const { modal, coins, win, error, bet, betStep, phase, autoRemaining, updateBet, setBetStep, setBetMax, startAutoSpins, stopAutoSpins } = useGame(
     (state) => state,
   );
   const animatedCoins = useAnimatedNumber(coins);
+  const startAuto = (count: number) => {
+    startAutoSpins(count);
+    window.dispatchEvent(new Event('k-slot-start-auto'));
+  };
   return (
     <>
       {/* Utility Buttons */}
@@ -46,8 +50,17 @@ const Interface = () => {
               ))}
               <button onClick={setBetMax}>MAX</button>
             </div>
+            <div className="auto-controls" aria-label="自動スピン">
+              <span>AUTO</span>
+              {[10, 25, 50].map((count) => (
+                <button onClick={() => startAuto(count)} key={count}>{count}</button>
+              ))}
+              <button className="auto-infinite" onClick={() => startAuto(-1)}>∞</button>
+            </div>
           </div>
         </div>
+
+        {autoRemaining !== 0 && <button className="auto-stop" onClick={stopAutoSpins}>AUTO 停止</button>}
 
         {/* Spins */}
         <div className="win-section">

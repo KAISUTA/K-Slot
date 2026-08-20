@@ -12,7 +12,7 @@ type SpinResponse = { reel_positions: number[]; payout: number | string; balance
 const toNumber = (value: number | string) => Number(value);
 
 const SlotMachine = forwardRef((_, ref) => {
-  const { phase, start, end, bet, setCoins, setWin, setError, addSpin, setReelSuspense } = useGame((state) => state);
+  const { phase, start, end, bet, setCoins, setWin, setError, addSpin, setReelSuspense, stopAutoSpins, consumeAutoSpin } = useGame((state) => state);
   const refs = [useRef<ReelGroup>(null), useRef<ReelGroup>(null), useRef<ReelGroup>(null), useRef<ReelGroup>(null), useRef<ReelGroup>(null)];
   const reelRefs = useMemo(() => refs, []);
   const resultRef = useRef<SpinResponse | null>(null);
@@ -39,7 +39,7 @@ const SlotMachine = forwardRef((_, ref) => {
   const handleSpinAction = useCallback(async () => {
     const state = useGame.getState();
     if (state.phase === 'spinning') return;
-    if (state.coins < state.bet) { setError('残高が不足しています。'); return; }
+    if (state.coins < state.bet) { stopAutoSpins(); setError('残高が不足しています。'); return; }
     start(bet); setError(''); setWin(0); setStopped(0); setReelSuspense(false); resultRef.current = null;
     try {
       const response = await fetch('/api/slots/spin', {
@@ -57,13 +57,23 @@ const SlotMachine = forwardRef((_, ref) => {
         reel.isSnapping = false;
       });
     } catch (error) {
-      end(); setError(error instanceof Error ? error.message : '抽選に失敗しました。');
+      end(); stopAutoSpins(); setError(error instanceof Error ? error.message : '抽選に失敗しました。');
     }
-  }, [addSpin, bet, end, reelRefs, setError, setReelSuspense, setWin, start]);
+  }, [addSpin, bet, end, reelRefs, setError, setReelSuspense, setWin, start, stopAutoSpins]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => { if (event.code === 'Space') { event.preventDefault(); void handleSpinAction(); } };
     document.addEventListener('keydown', onKeyDown); return () => document.removeEventListener('keydown', onKeyDown);
+  }, [handleSpinAction]);
+
+  useEffect(() => {
+    // Re-check the store at execution time: Stop may have been pressed during
+    // the small pause between reels settling and the next automatic round.
+    const onAutoStart = () => {
+      if (useGame.getState().autoRemaining !== 0) void handleSpinAction();
+    };
+    window.addEventListener('k-slot-start-auto', onAutoStart);
+    return () => window.removeEventListener('k-slot-start-auto', onAutoStart);
   }, [handleSpinAction]);
 
   useFrame(() => {
@@ -82,6 +92,10 @@ const SlotMachine = forwardRef((_, ref) => {
               const result = resultRef.current!; const balance = toNumber(result.balance);
               setWin(toNumber(result.payout)); setCoins(balance);
               window.parent.postMessage({ type: 'k-slot-balance', balance }, location.origin); end();
+              if (consumeAutoSpin()) window.setTimeout(
+                () => window.dispatchEvent(new Event('k-slot-start-auto')),
+                700,
+              );
             }, 450);
             return next;
           });

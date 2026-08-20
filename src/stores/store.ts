@@ -50,6 +50,11 @@ type State = {
   setError: (message: string) => void;
   spins: number;
   addSpin: () => void;
+  /** Remaining automatic spins. -1 means keep playing until stopped. */
+  autoRemaining: number;
+  startAutoSpins: (count: number) => void;
+  stopAutoSpins: () => void;
+  consumeAutoSpin: () => boolean;
   startTime: number;
   endTime: number;
   phase: 'idle' | 'spinning';
@@ -131,6 +136,22 @@ const useGame = create<State>()(
     setError: (message: string) => set({ error: message }),
     spins: 0,
     addSpin: () => set((state) => ({ spins: state.spins + 1 })),
+    autoRemaining: 0,
+    startAutoSpins: (count: number) => set({ autoRemaining: count }),
+    stopAutoSpins: () => set({ autoRemaining: 0 }),
+    // This is called only after a round has settled.  A spin is never queued
+    // ahead of time, so Stop and insufficient funds cannot leave paid requests
+    // waiting in the background.
+    consumeAutoSpin: () => {
+      const { autoRemaining } = useGame.getState();
+      if (autoRemaining === -1) return true;
+      if (autoRemaining > 1) {
+        set({ autoRemaining: autoRemaining - 1 });
+        return true;
+      }
+      if (autoRemaining === 1) set({ autoRemaining: 0 });
+      return false;
+    },
     startTime: 0,
     endTime: 0,
     phase: 'idle',
